@@ -19,7 +19,6 @@ rna-seq/
 └── results/           # outputs (qc, bam, counts, multiqc)
 ```
 
----
 
 ## 🛠️ Requirements
 
@@ -27,8 +26,6 @@ rna-seq/
 * [Snakemake](https://snakemake.readthedocs.io/) ≥ 7
 * \~50–100 GB disk space for 24 samples
 * 16+ CPU cores recommended for speed
-
----
 
 ## 🚀 Getting started
 
@@ -66,8 +63,6 @@ snakemake --use-conda --cores 16
 
 That’s it 🎉 — Snakemake will take care of running all steps in order.
 
----
-
 ## 📊 Outputs
 
 After it finishes, check:
@@ -87,22 +82,17 @@ After it finishes, check:
   * Raw featureCounts output → `results/counts/featurecounts.txt`
   * Tidy counts matrix → `results/counts/counts_matrix.tsv`
 
----
-
 ## 🐍 The Snakefile
 
 The full pipeline is implemented in the [Snakefile](./Snakefile).
 👉 Open it to see all rules (QC, trimming, alignment, counting, and summary).
 
----
 ## ✨ Why Snakemake?
 
 * Automates repetitive steps
 * Tracks what’s done and what needs re-running
 * Scales from a laptop to an HPC cluster
 * Makes your science reproducible
-
----
 
 ## 🧠 Next steps
 
@@ -113,13 +103,9 @@ Popular tools:
 * [edgeR (R)](https://bioconductor.org/packages/release/bioc/html/edgeR.html)
 * [PyDESeq2 (Python)](https://github.com/owkin/PyDESeq2)
 
----
-
 ## 🤝 Contributing
 
 Feel free to fork, open issues, or submit pull requests. Suggestions for improvement are always welcome!
-
----
 
 ## 📜 Citations
 
