@@ -7,6 +7,9 @@ The example here uses **Maize B73** as the reference genome and 24 RNA-seq sampl
 
 ![](flowchart.png)
 
+<img src="flowchart.png" alt="Workflow" width="60%"/>
+
+
 ## 📂 Folder structure
 
 ```bash
