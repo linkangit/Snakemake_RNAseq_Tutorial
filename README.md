@@ -5,9 +5,7 @@ This repo contains a **reproducible RNA-seq pipeline** built with [Snakemake](ht
 
 The example here uses **Maize B73** as the reference genome and 24 RNA-seq samples (mock vs. two treatments, two timepoints, four biological replicates each). But you can easily swap in your own samples or organism.
 
----
 ![](flowchart.png)
----
 
 ## 📂 Folder structure
 
