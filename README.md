@@ -9,40 +9,7 @@ The example here uses **Maize B73** as the reference genome and 24 RNA-seq sampl
 
 ## 🔎 What this workflow does
 
-1. **Quality check (FastQC)**
-
-   * Runs on raw and trimmed reads
-   * Produces HTML reports with read quality plots
-
-2. **Read trimming (fastp)**
-
-   * Removes adapters and low-quality bases
-   * Keeps good reads for downstream analysis
-
-3. **Build STAR index (once per reference)**
-
-   * Creates a genome index from B73 FASTA + GTF
-   * Speeds up mapping
-
-4. **Read alignment (STAR)**
-
-   * Maps reads to the genome
-   * Produces sorted BAM files
-
-5. **Counting (featureCounts)**
-
-   * Counts reads per gene
-   * Creates one master table with all samples
-
-6. **Summary reports (MultiQC)**
-
-   * Combines FastQC, fastp, STAR, and featureCounts logs into a single interactive HTML report
-
-End result:
-
-* `results/counts/counts_matrix.tsv` → ready for DE analysis (DESeq2, edgeR, etc.)
-* `results/multiqc/multiqc_report.html` → overview of data quality and mapping stats
-
+![](flowchart.png)
 ---
 
 ## 📂 Folder structure
