@@ -126,10 +126,12 @@ After it finishes, check:
   * Tidy counts matrix → `results/counts/counts_matrix.tsv`
 
 ---
+
 ## 🐍 The Snakefile
 
 The full pipeline is implemented in the [Snakefile](./Snakefile).
 👉 Open it to see all rules (QC, trimming, alignment, counting, and summary).
+
 ---
 ## ✨ Why Snakemake?
 
