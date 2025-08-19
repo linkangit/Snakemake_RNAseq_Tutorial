@@ -96,12 +96,6 @@ mamba create -n snk -c conda-forge -c bioconda snakemake=7.32 python=3.11 -y
 conda activate snk
 ```
 
-## 🐍 The Snakefile
-
-The full pipeline is implemented in the [Snakefile](./Snakefile).
-👉 Open it to see all rules (QC, trimming, alignment, counting, and summary).
-
-
 ### 4. Run the workflow
 
 ```bash
@@ -132,7 +126,11 @@ After it finishes, check:
   * Tidy counts matrix → `results/counts/counts_matrix.tsv`
 
 ---
+## 🐍 The Snakefile
 
+The full pipeline is implemented in the [Snakefile](./Snakefile).
+👉 Open it to see all rules (QC, trimming, alignment, counting, and summary).
+---
 ## ✨ Why Snakemake?
 
 * Automates repetitive steps
