@@ -1,4 +1,4 @@
-# 🧬 Snakemake tutorial workflow for a simple RNA-seq data processing
+# 🧬 Snakemake tutorial for a simple RNA-seq data processing workflow
 
 Welcome! 👋
 This repo contains a **reproducible RNA-seq pipeline** built with [Snakemake](https://snakemake.readthedocs.io/). It takes you from **raw FASTQ files → quality control → trimming → alignment → read counts → tidy matrix** — all in one place.
