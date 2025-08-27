@@ -1,0 +1,49 @@
+# multiqc_config.yaml
+title: "RNA-seq Analysis Report"
+subtitle: "Maize B73 Reference Analysis"
+intro_text: "This report summarizes quality control metrics and alignment statistics for RNA-seq samples."
+
+report_comment: "Generated with Snakemake RNA-seq pipeline"
+
+# Customize sample names
+sample_names_rename:
+  - ["_R1_fastqc", ""]
+  - ["_R2_fastqc", ""] 
+  - ["_R1_trimmed_fastqc", "_trimmed"]
+  - ["_R2_trimmed_fastqc", "_trimmed"]
+  - ["_Log.final.out", ""]
+  - ["_fastp.json", ""]
+
+# Module order
+module_order:
+  - fastqc:
+      name: "FastQC (Raw)"
+      path_filters:
+        - "./results/qc/raw/*"
+  - fastp
+  - fastqc:
+      name: "FastQC (Trimmed)" 
+      path_filters:
+        - "./results/qc/trimmed/*"
+  - star
+  - featureCounts
+
+# Remove file search patterns we don't want
+fn_ignore_files:
+  - "*.bam"
+  - "*.bai"
+  - "*.fastq.gz"
+
+# Table configuration
+table_columns_visible:
+  FastQC:
+    percent_duplicates: False
+    percent_gc: True
+    avg_sequence_length: True
+    percent_fails: False
+    total_sequences: True
+    
+# Custom plot configurations
+custom_plot_config:
+  star_alignment_plot:
+    tt_label: "STAR: {point.category}: {point.y:,.0f}"
