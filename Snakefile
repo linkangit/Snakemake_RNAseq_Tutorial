@@ -1,259 +1,373 @@
-#############################################
-#               USER SETTINGS               #
-#############################################
-
-# ---- Reference (Maize B73) ----
-REF_FASTA  = "/path/to/maize_B73.fa"
-REF_GTF    = "/path/to/maize_B73.gtf"
-STAR_INDEX = "ref/star_index"   # will be created if missing
-READ_LENGTH = 150               # typical 150bp; sjdbOverhang = 149
-
-# ---- Threads per step ----
-THREADS = {
-    "fastqc": 2,
-    "fastp": 4,
-    "star_index": 16,
-    "star_align": 8,
-    "samtools": 4,
-    "featurecounts": 8,
-}
-
-# ---- featureCounts parameters ----
-FC_STRANDED = 0        # 0: unstranded, 1: stranded, 2: reverse
-FC_PAIRED   = True     # Paired-end data?
-FC_TYPE     = "exon"   # -t exon
-FC_ID_ATTR  = "gene_id"  # -g gene_id
-
-# ---- Output directories ----
-OUT_QC_RAW  = "results/fastqc/raw"
-OUT_QC_TRIM = "results/fastqc/trimmed"
-OUT_FASTP   = "results/fastp"
-OUT_STAR    = "results/star"
-OUT_COUNTS  = "results/counts"
-OUT_MQC     = "results/multiqc"
-
-# ---- Samples (24 total; replace paths with your own) ----
-# Use any filenames; only sample IDs must be unique.
-SAMPLES = {
-    # Mock T1
-    "Mock_T1_R1": {"r1": "data/Mock_T1_R1_R1.fastq.gz", "r2": "data/Mock_T1_R1_R2.fastq.gz"},
-    "Mock_T1_R2": {"r1": "data/Mock_T1_R2_R1.fastq.gz", "r2": "data/Mock_T1_R2_R2.fastq.gz"},
-    "Mock_T1_R3": {"r1": "data/Mock_T1_R3_R1.fastq.gz", "r2": "data/Mock_T1_R3_R2.fastq.gz"},
-    "Mock_T1_R4": {"r1": "data/Mock_T1_R4_R1.fastq.gz", "r2": "data/Mock_T1_R4_R2.fastq.gz"},
-    # Mock T2
-    "Mock_T2_R1": {"r1": "data/Mock_T2_R1_R1.fastq.gz", "r2": "data/Mock_T2_R1_R2.fastq.gz"},
-    "Mock_T2_R2": {"r1": "data/Mock_T2_R2_R1.fastq.gz", "r2": "data/Mock_T2_R2_R2.fastq.gz"},
-    "Mock_T2_R3": {"r1": "data/Mock_T2_R3_R1.fastq.gz", "r2": "data/Mock_T2_R3_R2.fastq.gz"},
-    "Mock_T2_R4": {"r1": "data/Mock_T2_R4_R1.fastq.gz", "r2": "data/Mock_T2_R4_R2.fastq.gz"},
-    # treatment-1 T1
-    "Trt1_T1_R1": {"r1": "data/Trt1_T1_R1_R1.fastq.gz", "r2": "data/Trt1_T1_R1_R2.fastq.gz"},
-    "Trt1_T1_R2": {"r1": "data/Trt1_T1_R2_R1.fastq.gz", "r2": "data/Trt1_T1_R2_R2.fastq.gz"},
-    "Trt1_T1_R3": {"r1": "data/Trt1_T1_R3_R1.fastq.gz", "r2": "data/Trt1_T1_R3_R2.fastq.gz"},
-    "Trt1_T1_R4": {"r1": "data/Trt1_T1_R4_R1.fastq.gz", "r2": "data/Trt1_T1_R4_R2.fastq.gz"},
-    # treatment-1 T2
-    "Trt1_T2_R1": {"r1": "data/Trt1_T2_R1_R1.fastq.gz", "r2": "data/Trt1_T2_R1_R2.fastq.gz"},
-    "Trt1_T2_R2": {"r1": "data/Trt1_T2_R2_R1.fastq.gz", "r2": "data/Trt1_T2_R2_R2.fastq.gz"},
-    "Trt1_T2_R3": {"r1": "data/Trt1_T2_R3_R1.fastq.gz", "r2": "data/Trt1_T2_R3_R2.fastq.gz"},
-    "Trt1_T2_R4": {"r1": "data/Trt1_T2_R4_R1.fastq.gz", "r2": "data/Trt1_T2_R4_R2.fastq.gz"},
-    # treatment-2 T1
-    "Trt2_T1_R1": {"r1": "data/Trt2_T1_R1_R1.fastq.gz", "r2": "data/Trt2_T1_R1_R2.fastq.gz"},
-    "Trt2_T1_R2": {"r1": "data/Trt2_T1_R2_R1.fastq.gz", "r2": "data/Trt2_T1_R2_R2.fastq.gz"},
-    "Trt2_T1_R3": {"r1": "data/Trt2_T1_R3_R1.fastq.gz", "r2": "data/Trt2_T1_R3_R2.fastq.gz"},
-    "Trt2_T1_R4": {"r1": "data/Trt2_T1_R4_R1.fastq.gz", "r2": "data/Trt2_T1_R4_R2.fastq.gz"},
-    # treatment-2 T2
-    "Trt2_T2_R1": {"r1": "data/Trt2_T2_R1_R1.fastq.gz", "r2": "data/Trt2_T2_R1_R2.fastq.gz"},
-    "Trt2_T2_R2": {"r1": "data/Trt2_T2_R2_R1.fastq.gz", "r2": "data/Trt2_T2_R2_R2.fastq.gz"},
-    "Trt2_T2_R3": {"r1": "data/Trt2_T2_R3_R1.fastq.gz", "r2": "data/Trt2_T2_R3_R2.fastq.gz"},
-    "Trt2_T2_R4": {"r1": "data/Trt2_T2_R4_R1.fastq.gz", "r2": "data/Trt2_T2_R4_R2.fastq.gz"},
-}
-
-#############################################
-#            PIPELINE (NO CONFIG)           #
-#############################################
+#!/usr/bin/env python3
+"""
+RNA-seq Analysis Pipeline using Snakemake
+Processes paired-end RNA-seq data through QC, trimming, alignment, and quantification
+"""
 
 import os
+import pandas as pd
 from pathlib import Path
 
-SAMPLE_IDS = sorted(SAMPLES.keys())
-SJDB_OVERH = max(1, READ_LENGTH - 1)
+#############################################
+#               CONFIGURATION               #
+#############################################
 
-# ensure directories exist
-for d in [OUT_QC_RAW, OUT_QC_TRIM, OUT_FASTP, OUT_STAR, OUT_COUNTS, OUT_MQC, STAR_INDEX]:
-    Path(d).mkdir(parents=True, exist_ok=True)
+# Reference genome files
+REF_FASTA = "/path/to/maize_B73.fa"
+REF_GTF = "/path/to/maize_B73.gtf"
 
-def trimmed_r1(wc): return f"{OUT_FASTP}/{wc.sample}_R1.trimmed.fastq.gz"
-def trimmed_r2(wc): return f"{OUT_FASTP}/{wc.sample}_R2.trimmed.fastq.gz"
-def bam_path(wc):   return f"{OUT_STAR}/{wc.sample}.bam"
-def bai_path(wc):   return f"{OUT_STAR}/{wc.sample}.bam.bai"
+# Pipeline parameters
+READ_LENGTH = 150
+SJDB_OVERHANG = READ_LENGTH - 1
+
+# featureCounts parameters  
+FC_STRANDED = 0        # 0=unstranded, 1=stranded, 2=reverse
+FC_PAIRED = True       # Paired-end reads
+FC_FEATURE = "exon"    # Feature type to count
+FC_ATTR = "gene_id"    # Attribute for counting
+
+# Resource allocation
+THREADS = {
+    "fastqc": 4,
+    "fastp": 8, 
+    "star_index": 16,
+    "star_align": 12,
+    "featurecounts": 8,
+    "samtools": 4
+}
+
+# Output directories
+DIRS = {
+    "qc_raw": "results/qc/raw",
+    "qc_trimmed": "results/qc/trimmed", 
+    "trimmed": "results/trimmed",
+    "star_index": "results/star_index",
+    "aligned": "results/aligned",
+    "counts": "results/counts",
+    "multiqc": "results/multiqc"
+}
+
+# Sample definitions - 24 samples total
+SAMPLES = {
+    # Mock T1 samples
+    "Mock_T1_R1": {"R1": "data/Mock_T1_R1_R1.fastq.gz", "R2": "data/Mock_T1_R1_R2.fastq.gz"},
+    "Mock_T1_R2": {"R1": "data/Mock_T1_R2_R1.fastq.gz", "R2": "data/Mock_T1_R2_R2.fastq.gz"},
+    "Mock_T1_R3": {"R1": "data/Mock_T1_R3_R1.fastq.gz", "R2": "data/Mock_T1_R3_R2.fastq.gz"},
+    "Mock_T1_R4": {"R1": "data/Mock_T1_R4_R1.fastq.gz", "R2": "data/Mock_T1_R4_R2.fastq.gz"},
+    # Mock T2 samples  
+    "Mock_T2_R1": {"R1": "data/Mock_T2_R1_R1.fastq.gz", "R2": "data/Mock_T2_R1_R2.fastq.gz"},
+    "Mock_T2_R2": {"R1": "data/Mock_T2_R2_R1.fastq.gz", "R2": "data/Mock_T2_R2_R2.fastq.gz"},
+    "Mock_T2_R3": {"R1": "data/Mock_T2_R3_R1.fastq.gz", "R2": "data/Mock_T2_R3_R2.fastq.gz"},
+    "Mock_T2_R4": {"R1": "data/Mock_T2_R4_R1.fastq.gz", "R2": "data/Mock_T2_R4_R2.fastq.gz"},
+    # Treatment 1 T1 samples
+    "Trt1_T1_R1": {"R1": "data/Trt1_T1_R1_R1.fastq.gz", "R2": "data/Trt1_T1_R1_R2.fastq.gz"},
+    "Trt1_T1_R2": {"R1": "data/Trt1_T1_R2_R1.fastq.gz", "R2": "data/Trt1_T1_R2_R2.fastq.gz"},
+    "Trt1_T1_R3": {"R1": "data/Trt1_T1_R3_R1.fastq.gz", "R2": "data/Trt1_T1_R3_R2.fastq.gz"},
+    "Trt1_T1_R4": {"R1": "data/Trt1_T1_R4_R1.fastq.gz", "R2": "data/Trt1_T1_R4_R2.fastq.gz"},
+    # Treatment 1 T2 samples
+    "Trt1_T2_R1": {"R1": "data/Trt1_T2_R1_R1.fastq.gz", "R2": "data/Trt1_T2_R1_R2.fastq.gz"},
+    "Trt1_T2_R2": {"R1": "data/Trt1_T2_R2_R1.fastq.gz", "R2": "data/Trt1_T2_R2_R2.fastq.gz"},
+    "Trt1_T2_R3": {"R1": "data/Trt1_T2_R3_R1.fastq.gz", "R2": "data/Trt1_T2_R3_R2.fastq.gz"},
+    "Trt1_T2_R4": {"R1": "data/Trt1_T2_R4_R1.fastq.gz", "R2": "data/Trt1_T2_R4_R2.fastq.gz"},
+    # Treatment 2 T1 samples
+    "Trt2_T1_R1": {"R1": "data/Trt2_T1_R1_R1.fastq.gz", "R2": "data/Trt2_T1_R1_R2.fastq.gz"},
+    "Trt2_T1_R2": {"R1": "data/Trt2_T1_R2_R1.fastq.gz", "R2": "data/Trt2_T1_R2_R2.fastq.gz"},
+    "Trt2_T1_R3": {"R1": "data/Trt2_T1_R3_R1.fastq.gz", "R2": "data/Trt2_T1_R3_R2.fastq.gz"},
+    "Trt2_T1_R4": {"R1": "data/Trt2_T1_R4_R1.fastq.gz", "R2": "data/Trt2_T1_R4_R2.fastq.gz"},
+    # Treatment 2 T2 samples
+    "Trt2_T2_R1": {"R1": "data/Trt2_T2_R1_R1.fastq.gz", "R2": "data/Trt2_T2_R1_R2.fastq.gz"},
+    "Trt2_T2_R2": {"R1": "data/Trt2_T2_R2_R1.fastq.gz", "R2": "data/Trt2_T2_R2_R2.fastq.gz"},
+    "Trt2_T2_R3": {"R1": "data/Trt2_T2_R3_R1.fastq.gz", "R2": "data/Trt2_T2_R3_R2.fastq.gz"},
+    "Trt2_T2_R4": {"R1": "data/Trt2_T2_R4_R1.fastq.gz", "R2": "data/Trt2_T2_R4_R2.fastq.gz"}
+}
+
+#############################################
+#            PIPELINE SETUP                #
+#############################################
+
+# Extract sample names
+SAMPLE_NAMES = list(SAMPLES.keys())
+
+# Create output directories
+for directory in DIRS.values():
+    Path(directory).mkdir(parents=True, exist_ok=True)
+
+#############################################
+#               RULES                       #
+#############################################
 
 rule all:
+    """Target rule - defines all final outputs"""
     input:
-        f"{STAR_INDEX}/SAindex",
-        expand(trimmed_r1, sample=SAMPLE_IDS),
-        expand(trimmed_r2, sample=SAMPLE_IDS),
-        expand(bam_path,   sample=SAMPLE_IDS),
-        expand(bai_path,   sample=SAMPLE_IDS),
-        expand(f"{OUT_QC_RAW}" + "/{sample}.fastqc.done", sample=SAMPLE_IDS),
-        expand(f"{OUT_QC_TRIM}"+ "/{sample}.fastqc.done", sample=SAMPLE_IDS),
-        f"{OUT_COUNTS}/featurecounts.txt",
-        f"{OUT_COUNTS}/counts_matrix.tsv",
-        f"{OUT_MQC}/multiqc_report.html"
+        # STAR index
+        f"{DIRS['star_index']}/SAindex",
+        # Quality control reports
+        expand(f"{DIRS['qc_raw']}/{{sample}}_R1_fastqc.html", sample=SAMPLE_NAMES),
+        expand(f"{DIRS['qc_raw']}/{{sample}}_R2_fastqc.html", sample=SAMPLE_NAMES),
+        expand(f"{DIRS['qc_trimmed']}/{{sample}}_R1_trimmed_fastqc.html", sample=SAMPLE_NAMES),
+        expand(f"{DIRS['qc_trimmed']}/{{sample}}_R2_trimmed_fastqc.html", sample=SAMPLE_NAMES),
+        # Trimmed reads
+        expand(f"{DIRS['trimmed']}/{{sample}}_R1_trimmed.fastq.gz", sample=SAMPLE_NAMES),
+        expand(f"{DIRS['trimmed']}/{{sample}}_R2_trimmed.fastq.gz", sample=SAMPLE_NAMES),
+        # Aligned reads
+        expand(f"{DIRS['aligned']}/{{sample}}.bam", sample=SAMPLE_NAMES),
+        expand(f"{DIRS['aligned']}/{{sample}}.bam.bai", sample=SAMPLE_NAMES),
+        # Gene counts
+        f"{DIRS['counts']}/gene_counts.txt",
+        f"{DIRS['counts']}/count_matrix.tsv",
+        # MultiQC report
+        f"{DIRS['multiqc']}/multiqc_report.html"
 
-# STAR genome index
-rule star_index:
-    output:
-        f"{STAR_INDEX}/SAindex"
+rule build_star_index:
+    """Build STAR genome index"""
     input:
         fasta=REF_FASTA,
         gtf=REF_GTF
-    threads: THREADS["star_index"]
-    conda: "envs/align.yaml"
+    output:
+        f"{DIRS['star_index']}/SAindex"
+    params:
+        index_dir=DIRS['star_index']
+    threads: THREADS['star_index']
+    resources:
+        mem_mb=32000
+    conda: "envs/star.yaml"
+    log: "logs/star_index.log"
     shell:
-        r"""
-        STAR --runThreadN {threads} \
-             --runMode genomeGenerate \
-             --genomeDir {STAR_INDEX} \
+        """
+        STAR --runMode genomeGenerate \
+             --runThreadN {threads} \
+             --genomeDir {params.index_dir} \
              --genomeFastaFiles {input.fasta} \
              --sjdbGTFfile {input.gtf} \
-             --sjdbOverhang {SJDB_OVERH}
-        test -s {output} || (echo "STAR index missing {output}" && exit 1)
+             --sjdbOverhang {SJDB_OVERHANG} \
+             --limitGenomeGenerateRAM 30000000000 2> {log}
         """
 
-# Raw FastQC (marker files)
 rule fastqc_raw:
+    """Quality control of raw reads"""
     input:
-        r1=lambda wc: SAMPLES[wc.sample]["r1"],
-        r2=lambda wc: SAMPLES[wc.sample]["r2"]
+        r1=lambda wildcards: SAMPLES[wildcards.sample]["R1"],
+        r2=lambda wildcards: SAMPLES[wildcards.sample]["R2"]
     output:
-        touch(f"{OUT_QC_RAW}" + "/{sample}.fastqc.done")
-    threads: THREADS["fastqc"]
-    conda: "envs/qc.yaml"
-    shell:
-        r"""
-        fastqc -t {threads} -o {OUT_QC_RAW} {input.r1} {input.r2}
-        """
-
-# Trimming
-rule fastp:
-    input:
-        r1=lambda wc: SAMPLES[wc.sample]["r1"],
-        r2=lambda wc: SAMPLES[wc.sample]["r2"]
-    output:
-        r1=formatted("{OUT_FASTP}" + "/{sample}_R1.trimmed.fastq.gz"),
-        r2=formatted("{OUT_FASTP}" + "/{sample}_R2.trimmed.fastq.gz"),
-        html=formatted("{OUT_FASTP}" + "/{sample}.fastp.html"),
-        json=formatted("{OUT_FASTP}" + "/{sample}.fastp.json")
-    threads: THREADS["fastp"]
-    conda: "envs/qc.yaml"
-    shell:
-        r"""
-        fastp \
-          -i {input.r1} -I {input.r2} \
-          -o {output.r1} -O {output.r2} \
-          --thread {threads} \
-          --detect_adapter_for_pe \
-          --qualified_quality_phred 20 \
-          --length_required 30 \
-          --html {output.html} \
-          --json {output.json}
-        """
-
-# FastQC on trimmed reads (marker)
-rule fastqc_trimmed:
-    input:
-        r1=trimmed_r1,
-        r2=trimmed_r2
-    output:
-        touch(f"{OUT_QC_TRIM}" + "/{sample}.fastqc.done")
-    threads: THREADS["fastqc"]
-    conda: "envs/qc.yaml"
-    shell:
-        r"""
-        fastqc -t {threads} -o {OUT_QC_TRIM} {input.r1} {input.r2}
-        """
-
-# STAR alignment → sorted BAM + index
-rule star_align:
-    input:
-        idx=f"{STAR_INDEX}/SAindex",
-        r1=trimmed_r1,
-        r2=trimmed_r2
-    output:
-        bam=bam_path,
-        bai=bai_path
-    threads: THREADS["star_align"]
-    conda: "envs/align.yaml"
+        html_r1=f"{DIRS['qc_raw']}/{{sample}}_R1_fastqc.html",
+        html_r2=f"{DIRS['qc_raw']}/{{sample}}_R2_fastqc.html",
+        zip_r1=f"{DIRS['qc_raw']}/{{sample}}_R1_fastqc.zip",
+        zip_r2=f"{DIRS['qc_raw']}/{{sample}}_R2_fastqc.zip"
     params:
-        prefix=lambda wc: f"{OUT_STAR}/{wc.sample}."
+        outdir=DIRS['qc_raw']
+    threads: THREADS['fastqc']
+    conda: "envs/qc.yaml"
+    log: "logs/fastqc_raw_{sample}.log"
     shell:
-        r"""
+        """
+        # Create properly named symlinks for FastQC
+        ln -sf $(readlink -f {input.r1}) {params.outdir}/{wildcards.sample}_R1.fastq.gz
+        ln -sf $(readlink -f {input.r2}) {params.outdir}/{wildcards.sample}_R2.fastq.gz
+        
+        fastqc --threads {threads} --outdir {params.outdir} \
+               {params.outdir}/{wildcards.sample}_R1.fastq.gz \
+               {params.outdir}/{wildcards.sample}_R2.fastq.gz 2> {log}
+               
+        # Clean up symlinks
+        rm {params.outdir}/{wildcards.sample}_R1.fastq.gz
+        rm {params.outdir}/{wildcards.sample}_R2.fastq.gz
+        """
+
+rule trim_reads:
+    """Trim adapters and low-quality bases with fastp"""
+    input:
+        r1=lambda wildcards: SAMPLES[wildcards.sample]["R1"],
+        r2=lambda wildcards: SAMPLES[wildcards.sample]["R2"]
+    output:
+        r1=f"{DIRS['trimmed']}/{{sample}}_R1_trimmed.fastq.gz",
+        r2=f"{DIRS['trimmed']}/{{sample}}_R2_trimmed.fastq.gz",
+        html=f"{DIRS['trimmed']}/{{sample}}_fastp.html",
+        json=f"{DIRS['trimmed']}/{{sample}}_fastp.json"
+    threads: THREADS['fastp']
+    conda: "envs/qc.yaml"
+    log: "logs/fastp_{sample}.log"
+    shell:
+        """
+        fastp --thread {threads} \
+              --in1 {input.r1} --in2 {input.r2} \
+              --out1 {output.r1} --out2 {output.r2} \
+              --detect_adapter_for_pe \
+              --qualified_quality_phred 20 \
+              --unqualified_percent_limit 20 \
+              --length_required 30 \
+              --cut_front \
+              --cut_tail \
+              --cut_mean_quality 20 \
+              --html {output.html} \
+              --json {output.json} 2> {log}
+        """
+
+rule fastqc_trimmed:
+    """Quality control of trimmed reads"""
+    input:
+        r1=f"{DIRS['trimmed']}/{{sample}}_R1_trimmed.fastq.gz",
+        r2=f"{DIRS['trimmed']}/{{sample}}_R2_trimmed.fastq.gz"
+    output:
+        html_r1=f"{DIRS['qc_trimmed']}/{{sample}}_R1_trimmed_fastqc.html",
+        html_r2=f"{DIRS['qc_trimmed']}/{{sample}}_R2_trimmed_fastqc.html",
+        zip_r1=f"{DIRS['qc_trimmed']}/{{sample}}_R1_trimmed_fastqc.zip",
+        zip_r2=f"{DIRS['qc_trimmed']}/{{sample}}_R2_trimmed_fastqc.zip"
+    params:
+        outdir=DIRS['qc_trimmed']
+    threads: THREADS['fastqc']
+    conda: "envs/qc.yaml"
+    log: "logs/fastqc_trimmed_{sample}.log"
+    shell:
+        """
+        fastqc --threads {threads} --outdir {params.outdir} \
+               {input.r1} {input.r2} 2> {log}
+        """
+
+rule star_align:
+    """Align reads with STAR"""
+    input:
+        r1=f"{DIRS['trimmed']}/{{sample}}_R1_trimmed.fastq.gz",
+        r2=f"{DIRS['trimmed']}/{{sample}}_R2_trimmed.fastq.gz",
+        index=f"{DIRS['star_index']}/SAindex"
+    output:
+        bam=f"{DIRS['aligned']}/{{sample}}.bam",
+        log_final=f"{DIRS['aligned']}/{{sample}}_Log.final.out",
+        log_out=f"{DIRS['aligned']}/{{sample}}_Log.out",
+        log_progress=f"{DIRS['aligned']}/{{sample}}_Log.progress.out"
+    params:
+        index_dir=DIRS['star_index'],
+        out_prefix=f"{DIRS['aligned']}/{{sample}}_",
+        tmp_bam=f"{DIRS['aligned']}/{{sample}}_Aligned.sortedByCoord.out.bam"
+    threads: THREADS['star_align']
+    resources:
+        mem_mb=32000
+    conda: "envs/star.yaml"
+    log: "logs/star_align_{sample}.log"
+    shell:
+        """
         STAR --runThreadN {threads} \
-             --genomeDir {STAR_INDEX} \
+             --genomeDir {params.index_dir} \
              --readFilesIn {input.r1} {input.r2} \
              --readFilesCommand zcat \
-             --outFileNamePrefix {params.prefix} \
+             --outFileNamePrefix {params.out_prefix} \
              --outSAMtype BAM SortedByCoordinate \
+             --outSAMstrandField intronMotif \
+             --outFilterIntronMotifs RemoveNoncanonical \
+             --outSAMattrRGline ID:{wildcards.sample} SM:{wildcards.sample} \
              --quantMode GeneCounts \
              --twopassMode Basic \
-             --outSAMattrRGline ID:{wildcards.sample} SM:{wildcards.sample}
-        mv {params.prefix}Aligned.sortedByCoord.out.bam {output.bam}
-        samtools index -@ {threads} {output.bam}
+             --outFilterMultimapNmax 20 \
+             --alignSJoverhangMin 8 \
+             --alignSJDBoverhangMin 1 \
+             --outFilterMismatchNmax 999 \
+             --outFilterMismatchNoverReadLmax 0.04 \
+             --alignIntronMin 20 \
+             --alignIntronMax 1000000 \
+             --alignMatesGapMax 1000000 2> {log}
+        
+        # Move the output BAM file
+        mv {params.tmp_bam} {output.bam}
         """
 
-# featureCounts (one run over all BAMs)
-rule featurecounts:
+rule index_bam:
+    """Index BAM files"""
     input:
-        bams=expand(bam_path, sample=SAMPLE_IDS),
+        f"{DIRS['aligned']}/{{sample}}.bam"
+    output:
+        f"{DIRS['aligned']}/{{sample}}.bam.bai"
+    threads: THREADS['samtools']
+    conda: "envs/samtools.yaml"
+    log: "logs/index_bam_{sample}.log"
+    shell:
+        """
+        samtools index -@ {threads} {input} 2> {log}
+        """
+
+rule count_features:
+    """Count reads mapping to genes with featureCounts"""
+    input:
+        bams=expand(f"{DIRS['aligned']}/{{sample}}.bam", sample=SAMPLE_NAMES),
         gtf=REF_GTF
     output:
-        txt=f"{OUT_COUNTS}/featurecounts.txt",
-        summary=f"{OUT_COUNTS}/featurecounts.summary"
-    threads: THREADS["featurecounts"]
-    conda: "envs/align.yaml"
+        counts=f"{DIRS['counts']}/gene_counts.txt",
+        summary=f"{DIRS['counts']}/gene_counts.txt.summary"
+    params:
+        strand_param=f"-s {FC_STRANDED}",
+        paired_param="-p" if FC_PAIRED else ""
+    threads: THREADS['featurecounts']
+    conda: "envs/subread.yaml"
+    log: "logs/featurecounts.log"
     shell:
-        r"""
-        featureCounts \
-          -T {threads} \
-          -a {input.gtf} \
-          -o {output.txt} \
-          -t {FC_TYPE} \
-          -g {FC_ID_ATTR} \
-          {'-p -B -C' if FC_PAIRED else ''} \
-          {'-s ' + str(FC_STRANDED) if FC_STRANDED in [0,1,2] else ''} \
-          {input.bams}
-        mv {output.txt}.summary {output.summary}
+        """
+        featureCounts -T {threads} \
+                      -a {input.gtf} \
+                      -o {output.counts} \
+                      -t {FC_FEATURE} \
+                      -g {FC_ATTR} \
+                      {params.strand_param} \
+                      {params.paired_param} \
+                      -B -C \
+                      {input.bams} 2> {log}
         """
 
-# Make a tidy counts matrix (gene_id + sample columns)
-rule make_counts_matrix:
+rule create_count_matrix:
+    """Create a clean count matrix from featureCounts output"""
     input:
-        f"{OUT_COUNTS}/featurecounts.txt"
+        f"{DIRS['counts']}/gene_counts.txt"
     output:
-        f"{OUT_COUNTS}/counts_matrix.tsv"
+        f"{DIRS['counts']}/count_matrix.tsv"
     run:
-        import pandas as pd
-        df = pd.read_csv(input[0], sep="\t", comment="#")
-        keep_cols = ["Geneid"] + [c for c in df.columns if c.endswith(".bam")]
-        df = df[keep_cols]
-        bam_to_sample = {f"{OUT_STAR}/{s}.bam": s for s in SAMPLE_IDS}
-        new_cols = ["gene_id"] + [bam_to_sample.get(c, Path(c).stem.replace(".bam","")) for c in df.columns[1:]]
-        df.columns = new_cols
-        df.to_csv(output[0], sep="\t", index=False)
+        # Read featureCounts output
+        df = pd.read_csv(input[0], sep='\t', comment='#', low_memory=False)
+        
+        # Extract gene info and count columns
+        gene_info = df[['Geneid', 'Chr', 'Start', 'End', 'Strand', 'Length']]
+        count_cols = [col for col in df.columns if col.endswith('.bam')]
+        
+        # Create count matrix with clean sample names
+        count_data = df[['Geneid'] + count_cols].copy()
+        
+        # Clean up column names (remove path and .bam extension)
+        new_columns = ['gene_id']
+        for col in count_cols:
+            sample_name = os.path.basename(col).replace('.bam', '')
+            new_columns.append(sample_name)
+        
+        count_data.columns = new_columns
+        
+        # Save count matrix
+        count_data.to_csv(output[0], sep='\t', index=False)
+        
+        # Also save gene info
+        gene_info.to_csv(f"{DIRS['counts']}/gene_info.tsv", sep='\t', index=False)
 
-# MultiQC summary
 rule multiqc:
+    """Generate MultiQC report"""
     input:
-        expand(f"{OUT_QC_RAW}" + "/{sample}.fastqc.done",  sample=SAMPLE_IDS),
-        expand(f"{OUT_QC_TRIM}"+ "/{sample}.fastqc.done",  sample=SAMPLE_IDS),
-        expand(trimmed_r1, sample=SAMPLE_IDS),
-        expand(trimmed_r2, sample=SAMPLE_IDS),
-        expand(bam_path,   sample=SAMPLE_IDS),
-        f"{OUT_COUNTS}/featurecounts.txt"
+        # Raw FastQC
+        expand(f"{DIRS['qc_raw']}/{{sample}}_R1_fastqc.zip", sample=SAMPLE_NAMES),
+        expand(f"{DIRS['qc_raw']}/{{sample}}_R2_fastqc.zip", sample=SAMPLE_NAMES),
+        # Trimmed FastQC  
+        expand(f"{DIRS['qc_trimmed']}/{{sample}}_R1_trimmed_fastqc.zip", sample=SAMPLE_NAMES),
+        expand(f"{DIRS['qc_trimmed']}/{{sample}}_R2_trimmed_fastqc.zip", sample=SAMPLE_NAMES),
+        # fastp reports
+        expand(f"{DIRS['trimmed']}/{{sample}}_fastp.json", sample=SAMPLE_NAMES),
+        # STAR logs
+        expand(f"{DIRS['aligned']}/{{sample}}_Log.final.out", sample=SAMPLE_NAMES),
+        # featureCounts summary
+        f"{DIRS['counts']}/gene_counts.txt.summary"
     output:
-        html=f"{OUT_MQC}/multiqc_report.html"
-    threads: 2
-    conda: "envs/qc.yaml"
+        f"{DIRS['multiqc']}/multiqc_report.html"
+    params:
+        outdir=DIRS['multiqc'],
+        search_dirs=' '.join(DIRS.values())
+    conda: "envs/multiqc.yaml"
+    log: "logs/multiqc.log"
     shell:
-        r"""
-        multiqc -o {OUT_MQC} .
+        """
+        multiqc {params.search_dirs} \
+                --outdir {params.outdir} \
+                --force \
+                --verbose \
+                --config multiqc_config.yaml 2> {log}
         """
